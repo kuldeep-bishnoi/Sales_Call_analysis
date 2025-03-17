@@ -1,16 +1,17 @@
 # Sales Call Analysis System
 
-A comprehensive system for transcribing, analyzing, and evaluating sales calls to provide actionable insights into customer interactions.
+A comprehensive system for transcribing, analyzing, and evaluating sales calls to provide actionable insights into customer interactions, operating completely offline using local processing.
 
 ## Features
 
 - **Audio Preprocessing**: Clean and enhance audio quality before analysis
-- **Speech-to-Text**: Transcribe sales calls with high accuracy using OpenAI Whisper
-- **Sentiment Analysis**: Determine the emotional tone of conversations
+- **Speech-to-Text**: Transcribe sales calls using Faster Whisper, a third-party optimized implementation of OpenAI's Whisper model
+- **Sentiment Analysis**: Determine the emotional tone of conversations using rule-based analysis
 - **Engagement Analysis**: Measure customer interest and response patterns
-- **Objection Detection**: Identify and categorize customer objections
+- **Objection Detection**: Identify and categorize customer objections using pattern recognition
 - **Conversion Probability**: Predict how likely a customer is to convert
 - **Interactive Dashboard**: Visualize insights with a user-friendly Streamlit interface
+- **Fully Offline Operation**: All analysis runs locally with no dependency on external APIs
 
 ## System Architecture
 
@@ -18,13 +19,13 @@ The system follows a modular architecture:
 
 1. **Core Components**:
    - Audio preprocessing for cleaning recordings
-   - Speech-to-text transcription using Whisper
+   - Speech-to-text transcription using Faster Whisper
    - Text processing and cleaning
 
 2. **Analysis Services**:
-   - Sentiment analyzer to detect conversation tone
-   - Engagement analyzer to measure customer interest
-   - Objection detector to identify customer concerns
+   - Sentiment analyzer for detecting conversation tone
+   - Engagement analyzer for measuring customer interest
+   - Objection detector for identifying customer concerns
    - Satisfaction and conversion probability analyzer
 
 3. **API and Frontend**:
@@ -36,7 +37,7 @@ The system follows a modular architecture:
 
 - Python 3.8+
 - MongoDB
-- Whisper.cpp model file (automatically downloaded during setup)
+- Faster-Whisper model files (automatically downloaded during setup)
 
 ## Installation
 
@@ -71,7 +72,7 @@ The system follows a modular architecture:
    ```
    python utils/download_whisper_model.py --model medium
    ```
-   Available models: tiny, base, small, medium, large, large-v1, large-v2, large-v3
+   Available models: tiny, tiny.en, base, base.en, small, small.en, medium, medium.en, large-v1, large-v2, large-v3
 
 6. Make sure MongoDB is running on your system.
 
@@ -115,9 +116,27 @@ The dashboard will be available at `http://localhost:8501`.
    - Process calls: `POST /api/process/{call_id}`
    - Get results: `GET /api/calls/{call_id}`
 
-## Development
+## Features in Detail
 
-### Project Structure
+### Transcription
+The system uses Faster Whisper for accurate speech-to-text transcription without requiring an API key or internet connection. Faster Whisper is a community-created, optimized implementation of OpenAI's Whisper model that typically runs 4-5 times faster while maintaining the same accuracy. It supports multiple languages and produces high-quality transcripts with timestamps.
+
+### Analysis Components
+
+- **Sentiment Analysis**: Analyzes the emotional tone of the conversation, classifying sections as positive, negative, or neutral.
+- **Engagement Analysis**: Measures how engaged the customer is throughout the call, looking at response patterns and interaction dynamics.
+- **Objection Detection**: Identifies when customers raise concerns or objections, categorizing them into types like pricing, timing, need, competition, and authority.
+- **Satisfaction Score**: Combines various metrics to estimate overall customer satisfaction on a scale of 1-10.
+- **Conversion Probability**: Predicts the likelihood of the sale converting based on the detected sentiment, engagement, and objections.
+
+### Dashboard
+The interactive Streamlit dashboard provides an intuitive interface to:
+- Upload and manage call recordings
+- View comprehensive analysis results
+- Explore visual metrics and gauges
+- Read detailed transcripts and key insights
+
+## Project Structure
 
 ```
 sales-call-analysis/
@@ -132,6 +151,7 @@ sales-call-analysis/
 │   ├── utils/            # Utility functions
 │   └── config/           # Configuration settings
 ├── data/                 # Data storage directories
+├── utils/                # Helper scripts
 ├── .env.example          # Example environment variables
 ├── main.py               # API server entry point
 ├── requirements.txt      # Project dependencies
@@ -139,11 +159,13 @@ sales-call-analysis/
 └── README.md             # This file
 ```
 
-### Running Tests
+## Privacy and Security
 
-```
-# Coming soon
-```
+Since the system runs completely locally:
+- No audio data is sent to external servers
+- All processing happens on your machine
+- No API keys required for core functionality
+- Full control over your data and analysis
 
 ## Future Enhancements
 
@@ -159,6 +181,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Acknowledgments
 
-- OpenAI for the Whisper and GPT-4 models
+- OpenAI for creating and open-sourcing the original Whisper model
+- Guillaume Klein and contributors for developing Faster Whisper, an optimized implementation using CTranslate2
 - FastAPI and Streamlit for making awesome development frameworks
 
