@@ -43,7 +43,7 @@ The system follows a modular architecture:
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/sales-call-analysis.git
+   git clone https://github.com/kuldeep-bishnoi/sales-call-analysis.git
    cd sales-call-analysis
    ```
 
